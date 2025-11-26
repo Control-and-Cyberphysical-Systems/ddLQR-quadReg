@@ -312,7 +312,7 @@ loglog(lambda, Acl_normDiff_H1, 'Color', Cmap(4,:), 'LineWidth', 0.7)
 loglog(lambda, Acl_normDiff_proj, '--', 'Color', Cmap(4,:), 'LineWidth', 0.7)
 % Warning to explain different results. In particular, case {1, 2} does not
 % converge to 0
-if any(abs(eig(A_LS+B_LS*K_LS))>0)
+if any(abs(eig(A_LS+B_LS*K_LS))>1)
     title('Warning! $K_\mathrm{LS}$ does not stabilize $(A_\mathrm{LS}, B_\mathrm{LS})$!', 'Interpreter', 'latex')
 end
 
@@ -494,7 +494,7 @@ text(K_CE(1)+0.15, K_CE(2)+0.5, '${K}_{\mathrm{CE}}$', 'Interpreter','latex', 'f
 % being enforced as an equality constraint. Due to space restrictions, this
 % effect is not discussed in the paper.
 % Warning to explain different results. 
-if any(abs(eig(A_LS+B_LS*K_LS))>0)
+if any(abs(eig(A_LS+B_LS*K_LS))>1)
     title('Warning! $K_\mathrm{LS}$ does not stabilize $(A_\mathrm{LS}, B_\mathrm{LS})$!', 'Interpreter', 'latex')
 end
 
