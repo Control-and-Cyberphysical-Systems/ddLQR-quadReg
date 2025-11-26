@@ -525,8 +525,8 @@ n2 = 21;
 x1 = linspace(-1, 1, n1);
 x2 = linspace(-1, 1, n2);
 [XX1, XX2] = meshgrid(x1, x2);
-dXXplus1 = zeros(n1, n2, 4);
-dXXplus2 = zeros(n1, n2, 4);
+dXXplus1 = zeros(n1, n2, length(lambda));
+dXXplus2 = zeros(n1, n2, length(lambda));
 
 % Visualization of example trajectories are only provided for the data
 % used in the paper, since they were hand-placed for that specific
@@ -536,10 +536,10 @@ X0s = [0,  0.9, 0.9, 0.9,  0,   -0.9, -0.9, -0.9;
       0.9, 0.9, 0,  -0.9, -0.9, -0.9,  0,    0.9];
 nSim = 20;
 % Allocate empty matrix for (vectorized) simulation results
-XSim_vec = zeros(n*(nSim+1), size(X0s, 2), 4);
+XSim_vec = zeros(n*(nSim+1), size(X0s, 2), length(lambda));
 
 
-for i = length(lambda):-1:1
+for i = 1:length(lambda)
     % Covariance parametrization with case {3}
     cvx_begin SDP
         variable P(n, n) semidefinite
@@ -587,6 +587,8 @@ end
 figure
 t = tiledlayout(2, 2, 'TileSpacing', 'tight');
 subplots = [];
+% Run loop backwards, so we can normalize the quiver plots with a common
+% factor based on the largest lambda
 for i = length(lambda):-1:1
     subplots = [subplots, nexttile(i)];
     if ~isMATLABReleaseOlderThan("R2024b")
@@ -594,7 +596,7 @@ for i = length(lambda):-1:1
         % subplots for easier comparison, which is the version in the paper
         % Unfortunately, it seems to be incompatible with Matlab R2023b 
         % (and presumably also older realses)
-        if i == 4
+        if i == length(lambda)
             q = quiver(XX1, XX2, dXXplus1(:, :, i), dXXplus2(:, :, i), 'Color', Cmap(4,:));
             qScale = q.ScaleFactor;
         else
